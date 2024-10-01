@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Country Viewer</title>
+    <style>
+        img {
+            width: 300px;
+            height: 180px;
+            margin: 50px;
+        }
+        
+        #one {
+            max-height: 250px; 
+            overflow-y: auto;  
+           
+            background: white; 
+            text-align: center;
+            width: 250px;
+
+
+            
+        }
+
+        .two {
+            display: flex;
+            justify-content: center;
+            text-align: center;
+            max-width: 60%;
+            flex-direction: column;
+            margin: 0 auto;
+            padding: 20px 30px;
+            background-color: rgba(146, 213, 240, 0.252);
+            box-shadow: 0 0 5px rgba(17, 17, 17, 0.466);
+            border-radius: 15px;
+            width: 50%;
+        }
+
+        .four {
+            margin: 100px;
+        }
+
+        button {
+            margin: 12px 50px;
+            padding: 10px 25px;
+            background-color: skyblue;
+            color: black;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+       
+
+        .nav {
+            padding: 10px; 
+            border-bottom: 1px solid #ccc; 
+            cursor: pointer;
+            
+        }
+
+        .three{
+            position:relative;
+        }
+
+        #one > div {
+            position:absolute;
+            top:0;
+            left:250px;
+        }
+
+
+        input {
+            width: 60%;
+            padding: 5px;
+            font-size: 16px;
+            border: 2px solid #ccc;
+            background-color: rgba(0, 255, 255, 0.295);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="two">
+        <div class="four">
+            <input type="text" placeholder="Search Here..." id="myinput">
+            <div class="three">
+                <div class="one" id="one"></div>
+                <img src="images/ph.png" alt="" id="images">
+                <h1 id="country">Country</h1>
+                <h1 id="code">CODES</h1>
+                <button id="prev">prev</button>
+                <button id="next">next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const country = document.getElementById("country");
+        const code = document.getElementById("code");
+        const images = document.getElementById("images");
+        const myinput = document.getElementById("myinput");
+        const next = document.getElementById("next");
+        const one = document.getElementById("one");
+        const prev = document.getElementById("prev");
+
+        const aray = [
+            { images: "ar.png", code: "ARG", country: "Argentina" },
+            { images: "ch.png", code: "CNY", country: "China" },
+            { images: "eu.png", code: "EUR", country: "Europe" },
+            { images: "hk.png", code: "HKD", country: "Hong Kong" },
+            { images: "jp.png", code: "JP", country: "Japan" },
+            { images: "kn.png", code: "KRW", country: "South Korea" },
+            { images: "nw.png", code: "NOK", country: "Norway" },
+            { images: "nz.png", code: "NZD", country: "New Zealand" },
+            { images: "ph.png", code: "PH", country: "Philippines" },
+            { images: "sm.png", code: "SOS", country: "Somalia" }
+        ];
+
+        let place = aray;
+        let index = 0;
+
+        function called() {
+            const hi = place[index];
+            country.textContent = `COUNTRY: ${hi.country}`;
+            code.textContent = ` CODE: ${hi.code}`;
+            images.src = `images/${hi.images}`;
+        }
+
+        next.addEventListener('click', () => {
+            index = (index + 1) % place.length;
+            called();
+        });
+
+        prev.addEventListener('click', () => {
+            index = (index - 1 + place.length) % place.length;
+            called();
+        });
+
+        myinput.addEventListener('input', suggest);
+        myinput.addEventListener('input', suggest);
+
+        function suggest() {
+            const sug = myinput.value.toLowerCase();
+            one.innerHTML = '';
+
+            if (sug !== '') {
+                place.forEach((hi) => {
+                    if (hi.country.toLowerCase().includes(sug)) {
+                        const hey = document.createElement('div');
+                        hey.textContent = hi.country;
+                        hey.classList.add('nav');
+
+                        hey.addEventListener('input', () => {
+                            index = aray.findIndex(c => c.country === hi.country);
+                            myinput.value = hi.country;
+                            one.innerHTML = '';
+                            called();
+                        });
+                        one.appendChild(hey);
+                    }
+                });
+            } 
+        }
+
+        document.addEventListener('click', (event) => {
+            const paps = myinput.contains(event.target);
+            if (!paps) {
+                one.innerHTML = '';
+            }
+        });
+
+        function yows(query) {
+            place = query
+                ? aray.filter(hi => hi.country.toLowerCase().startsWith(query.toLowerCase()))
+                : aray;
+
+            index = 0;
+            suggest();
+        }
+
+        myinput.addEventListener('input', () => {
+            yows(myinput.value);
+            called();
+        });
+
+        called();
+    </script>
+</body>
+</html>
