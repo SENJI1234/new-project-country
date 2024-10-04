@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="hakdo.css">
+</head>
+
+<body>
+ <div class="one">
+  <div class="two">
+ <img src="images/aus.gif" alt="" id="images">
+ <h1 id="nation">nation</h1>
+ <input type="text" id="mytext" placeholder="Enter the name  country">
+
+ <h1 id="capital">capital</h1>
+ <h1 id="currency">currency</h1>
+ <h1  id="code">code</h1>
+
+ <div class="three">
+ <button id="next">next</button> <button id="prev">prev</button>
+ </div>
+ <div class="hak" id="one"></div>
+
+ </div>
+ </div>
+
+  
+</body>
+</html>
+
+
+<script>
+
+const one = document.getElementById("one");
+const prev = document.getElementById("prev");
+const next = document.getElementById("next");
+const capital = document.getElementById("capital");
+const code = document.getElementById("code");
+const currency = document.getElementById("currency");
+const nation = document.getElementById("nation");
+
+const images = document.getElementById("images");
+const mytext = document.getElementById("mytext");
+
+
+const array = [
+  {images:'aus.gif',nation:'america',code:'US',currency:'dollar',capital:'us'},
+  {images:'bang.gif',nation:'philippine',code:'PH',currency:'PESO',capital:'manila'},
+  {images:'japan.gif',nation:'russia',code:'RS',currency:'KWA',capital:'SIS'},
+
+
+
+]
+array.sort((a,b)=> a.nation.localeCompare(b.nation))
+
+let yowss = array;
+let index = 0;
+
+
+
+
+function called(){
+    const hi = yowss[index];
+    nation.textContent = hi.nation;
+    code.textContent = hi.code;
+    currency.textContent = hi.currency;
+    capital.textContent = hi.capital;
+    images.src = `images/${hi.images}`;
+}
+
+
+
+
+next.addEventListener('click',()=>{
+
+    index = (index + 1)% array.length;
+    yowss = array;
+    called()
+  
+})
+prev.addEventListener('click',()=>{
+
+    index = (index - 1 + array.length)% array.length;
+    yowss = array;
+    called()
+  
+})
+
+ mytext.addEventListener('input',hakdog)
+ mytext.addEventListener('input',hakdog)
+
+ function hakdog(){
+  const ha = mytext.value.toLowerCase();
+  one.innerHTML = '';
+  if(ha !==''){
+    yowss.forEach((hi)=>{
+  
+     
+  if(hi.nation.toLowerCase().includes(ha)){
+    const back = document.createElement('div');
+    back.textContent = hi.nation;
+    back.classList.add('like');
+    
+
+
+   back.addEventListener('click',()=>{
+    index = array.findIndex(c => c.nation === hi.nation)
+    mytext.value =hi.nation;
+    one.innerHTML = '';
+    called()
+   })
+   one.appendChild(back);
+
+
+
+
+
+  }
+
+
+
+    })
+  }
+
+
+ } 
+
+
+ function ok (query){
+  yowss = query ?
+  array.filter(hi=> hi.nation.toLowerCase().startsWith(query.toLowerCase()))
+  :array;
+  index = 0;
+  hakdog()
+
+ }
+
+
+ mytext.addEventListener('input',()=>{
+  ok(mytext.value)
+  called()
+ })
+
+
+ called()
+
+
+
+</script>
+
